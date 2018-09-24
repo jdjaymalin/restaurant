@@ -1,10 +1,8 @@
 <?php namespace Api\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Restaurant
@@ -13,13 +11,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int id
  * @property string name
  * @property int user_id
- * @property int rating
- * @property Rating[]|Collection $ratings
  *
  *  @method static static|Builder find($id)
  *  @method static static|Builder nameSearch($search)
  *  @method Builder hasVegetarian($isVegetarian)
- *  @method Builder hasRating($rating)
  */
 class Restaurant extends Model
 {
@@ -33,20 +28,12 @@ class Restaurant extends Model
         ];
         $this->hidden = ['user_id'];
 
-
         parent::__construct($attributes);
     }
 
     public function author() : BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function getRatingAttribute() : float
-    {
-        $avg = $this->ratings->average('rating') ?? 0;
-
-        return number_format($avg, 2);
     }
 
     /**
