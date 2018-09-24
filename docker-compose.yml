@@ -1,0 +1,28 @@
+version: '2'
+services:
+
+    # Application container
+    php:
+        build: .
+        restart: unless-stopped
+        volumes:
+            - ./:/server/http
+        ports:
+            - "80:80"
+            - "443:443"
+        links:
+            - postgres
+        environment:
+            DEBUG: 'true'
+
+    postgres:
+        image: onjin/alpine-postgres:9.5
+        restart: unless-stopped
+        ports:
+            - "5432:5432"
+        environment:
+            LC_ALL: C.UTF-8
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: app
+
